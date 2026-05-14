@@ -520,7 +520,7 @@ const ProductsPage = () => {
                             <div className="text-xs text-gray-400 dark:text-gray-500">
                               {/* {product.product_images.length} image
                               {product.product_images.length !== 1 ? "s" : ""} · MOQ:{" "} */}
-                              /* ashish changes */
+                              {/* /* ashish changes */ }
                                 {product.product_images?.length ?? 0} image
                                 {(product.product_images?.length ?? 0) !== 1 ? "s" : ""} · MOQ:{" "}
 
