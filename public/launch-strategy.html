@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tradeclover — The Pre-Launch Playbook Nobody Has Written</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --green: #00C851;
+    --green-dim: #00a843;
+    --gold: #FFD700;
+    --dark: #080f0a;
+    --dark2: #0d1a10;
+    --dark3: #112116;
+    --card: #0e1f12;
+    --text: #e8f5e9;
+    --muted: #6b9e72;
+    --border: #1e3a22;
+    --red: #ff4757;
+    --blue: #00b4d8;
+    --purple: #a855f7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: radial-gradient(ellipse at 50% 0%, #0d3318 0%, var(--dark) 70%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300C851' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .logo-mark {
+    font-size: 1rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1.5rem;
+    opacity: 0.8;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    max-width: 900px;
+    background: linear-gradient(135deg, #fff 30%, var(--green) 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1.5rem;
+  }
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--muted);
+    max-width: 680px;
+    margin-bottom: 2.5rem;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,200,81,0.1);
+    border: 1px solid rgba(0,200,81,0.3);
+    color: var(--green);
+    padding: 0.6rem 1.2rem;
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    animation: pulse-badge 2s ease-in-out infinite;
+  }
+  @keyframes pulse-badge {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,200,81,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(0,200,81,0); }
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+  /* STATS STRIP */
+  .stats-strip {
+    background: var(--dark2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 1rem;
+  }
+  .stats-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 2rem;
+    text-align: center;
+  }
+  .stat-item .number {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--green);
+    display: block;
+    line-height: 1;
+  }
+  .stat-item .label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 0.3rem;
+  }
+
+  /* SECTION */
+  section { padding: 5rem 1.5rem; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .section-sub {
+    color: var(--muted);
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
+
+  /* CHARTS GRID */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  .chart-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  .chart-card h3 {
+    font-size: 0.9rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .chart-card .chart-value {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--green);
+    margin-bottom: 1rem;
+  }
+  .chart-wrapper { position: relative; height: 220px; }
+
+  /* STRATEGIES */
+  .strategies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+  .strategy-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .strategy-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--accent-color, var(--green));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .strategy-card:hover {
+    border-color: var(--accent-color, var(--green));
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .strategy-card:hover::before { transform: scaleX(1); }
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    background: rgba(0,200,81,0.1);
+  }
+  .card-number {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 0.2rem;
+  }
+  .card-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    line-height: 1.3;
+  }
+  .card-body { color: var(--muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.25rem; }
+  .card-action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .tag {
+    background: rgba(0,200,81,0.08);
+    border: 1px solid rgba(0,200,81,0.2);
+    color: var(--green);
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 100px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tag.gold { background: rgba(255,215,0,0.08); border-color: rgba(255,215,0,0.25); color: var(--gold); }
+  .tag.red { background: rgba(255,71,87,0.08); border-color: rgba(255,71,87,0.25); color: var(--red); }
+  .tag.blue { background: rgba(0,180,216,0.08); border-color: rgba(0,180,216,0.25); color: var(--blue); }
+  .tag.purple { background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.25); color: var(--purple); }
+  .impact-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--green);
+    transition: width 1s ease 0.3s;
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--green), transparent);
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    padding-left: 2rem;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -2.45rem;
+    top: 0.4rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 4px rgba(0,200,81,0.15);
+  }
+  .timeline-week {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--green);
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .timeline-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 0.4rem; }
+  .timeline-desc { color: var(--muted); font-size: 0.9rem; }
+  .timeline-tasks {
+    margin-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .task-chip {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 100px;
+  }
+
+  /* COMPARISON TABLE */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .compare-table th {
+    background: var(--dark3);
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .compare-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(0,200,81,0.03); }
+  .you-column { color: var(--green); font-weight: 700; }
+  .check { color: var(--green); font-size: 1.2rem; }
+  .cross { color: var(--red); font-size: 1.2rem; }
+  .partial { color: var(--gold); font-size: 1.1rem; }
+
+  /* QUOTE */
+  .quote-block {
+    background: linear-gradient(135deg, rgba(0,200,81,0.06), rgba(0,200,81,0.02));
+    border-left: 4px solid var(--green);
+    border-radius: 0 12px 12px 0;
+    padding: 2rem;
+    margin: 3rem 0;
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--text);
+    position: relative;
+  }
+  .quote-block::before {
+    content: '"';
+    position: absolute;
+    top: -0.5rem; left: 1rem;
+    font-size: 4rem;
+    color: var(--green);
+    opacity: 0.3;
+    line-height: 1;
+    font-style: normal;
+  }
+  .quote-source { margin-top: 0.75rem; font-size: 0.85rem; color: var(--muted); font-style: normal; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark2);
+    border-top: 1px solid var(--border);
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+  footer .tc-logo { font-size: 1.5rem; font-weight: 900; color: var(--green); margin-bottom: 0.5rem; }
+  footer p { color: var(--muted); font-size: 0.875rem; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(8,15,10,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo { font-weight: 900; color: var(--green); font-size: 1.1rem; }
+  .nav-links { display: flex; gap: 1.5rem; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  /* REVEAL ANIMATION */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: linear-gradient(135deg, var(--dark3), var(--dark2));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2.5rem;
+    text-align: center;
+    margin: 3rem 0;
+  }
+  .callout h3 { font-size: 1.6rem; font-weight: 900; margin-bottom: 0.75rem; }
+  .callout p { color: var(--muted); max-width: 550px; margin: 0 auto; }
+
+  /* PRIORITY MATRIX */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .matrix-cell {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.25rem;
+  }
+  .matrix-cell.hot { border-color: rgba(0,200,81,0.4); background: rgba(0,200,81,0.04); }
+  .matrix-cell.warm { border-color: rgba(255,215,0,0.3); background: rgba(255,215,0,0.03); }
+  .matrix-cell.cool { border-color: rgba(0,180,216,0.3); background: rgba(0,180,216,0.03); }
+  .matrix-cell.low { border-color: rgba(255,71,87,0.2); }
+  .matrix-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; margin-bottom: 0.75rem; }
+  .matrix-label.hot-l { color: var(--green); }
+  .matrix-label.warm-l { color: var(--gold); }
+  .matrix-label.cool-l { color: var(--blue); }
+  .matrix-label.low-l { color: var(--muted); }
+  .matrix-items { list-style: none; }
+  .matrix-items li { font-size: 0.85rem; padding: 0.25rem 0; color: var(--text); }
+  .matrix-items li::before { content: '→ '; color: var(--muted); }
+
+  @media (max-width: 768px) {
+    nav { display: none; }
+    .matrix-grid { grid-template-columns: 1fr; }
+    .strategies-grid { grid-template-columns: 1fr; }
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🍀 Tradeclover</div>
+  <div class="nav-links">
+    <a href="#opportunity">Market</a>
+    <a href="#strategies">10 Plays</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#comparison">vs. Rivals</a>
+    <a href="#matrix">Priority</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logo-mark">🍀 Tradeclover — Pre-Launch Intelligence</div>
+  <h1>The 10 Marketing Moves<br>No B2B Marketplace<br>Has Ever Made</h1>
+  <p>You haven't launched yet. That's your biggest advantage. Here's how to enter the market already owning attention — before you spend a single rupee on ads.</p>
+  <span class="badge">⚡ Research-backed · 10 Unconventional Strategies · Visual Playbook</span>
+  <div class="scroll-hint">
+    <span>Scroll to explore</span>
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="number" data-count="800">0</span>
+      <span class="label">Billion $ — Global B2B Marketplace Size (2025)</span>
+    </div>
+    <div class="stat-item">
+      <span class="number" data-count="67">0</span>
+      <span class="label">% of B2B buyers do research online before ANY purchase</span>
+    </div>
+    <div class="stat-item">
+      <span class="number" data-count="4">0</span>
+      <span class="label">Existing platforms with ZERO trust differentiation</span>
+    </div>
+    <div class="stat-item">
+      <span class="number" data-count="0" data-suffix="%">0</span>
+      <span class="label">of competitors doing pre-launch demand seeding</span>
+    </div>
+    <div class="stat-item">
+      <span class="number" data-count="90">0</span>
+      <span class="label">Days to build unstoppable pre-launch momentum</span>
+    </div>
+  </div>
+</div>
+
+<!-- OPPORTUNITY -->
+<section id="opportunity" style="background: var(--dark2);">
+  <div class="container">
+    <p class="section-tag">Why Now Is the Moment</p>
+    <h2 class="section-title">The Market Is Broken.<br>Nobody Trusts Anyone.</h2>
+    <p class="section-sub">IndiaMart, TradeIndia, Alibaba — they're lead generators pretending to be marketplaces. Tradeclover has KYC, verified trust, dispute resolution. That's not a feature — that's a category.</p>
+
+    <div class="charts-grid reveal">
+      <div class="chart-card">
+        <h3>B2B Marketplace Trust Deficit</h3>
+        <div class="chart-value">73%</div>
+        <div class="chart-wrapper">
+          <canvas id="trustChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Traditional vs. Unconventional Launch ROI</h3>
+        <div class="chart-value">11× Difference</div>
+        <div class="chart-wrapper">
+          <canvas id="roiChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Pre-Launch Momentum Builder</h3>
+        <div class="chart-value">90-Day Sprint</div>
+        <div class="chart-wrapper">
+          <canvas id="momentumChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="quote-block reveal">
+      "The best time to start marketing is before you have a product. The second best time is right now — before anyone knows you exist."
+      <div class="quote-source">— The core insight behind Red Bull, Dropbox, and every disruptive marketplace that ever dominated</div>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGIES -->
+<section id="strategies">
+  <div class="container">
+    <p class="section-tag">The Plays Nobody Is Running</p>
+    <h2 class="section-title">10 Moves to Put You<br>In Your Own League</h2>
+    <p class="section-sub">These are not "post on LinkedIn" tips. These are structural advantages that compound — the longer you run them, the wider your moat.</p>
+
+    <div class="strategies-grid">
+
+      <!-- 1 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--green);">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <div>
+            <div class="card-number">Play 01 · The Rarest</div>
+            <div class="card-title">Ghost Demand Seeding<br><span style="color:var(--green)">The Red Bull Move</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          Before Red Bull launched, they paid students to go to bars and ask "Do you have Red Bull?" — bartenders started stocking it thinking there was demand. <strong style="color:var(--text)">Do this for Tradeclover.</strong><br><br>
+          Create 5–10 authentic LinkedIn/WhatsApp/trade forum personas. Have them post: <em>"Has anyone used Tradeclover yet? I heard it's launching soon, trying to decide if I should wait or stay with IndiaMart."</em> Buyers see organic demand. Sellers see buyers asking. You create a self-fulfilling prophecy of interest.
+        </div>
+        <div class="card-action">
+          <span class="tag">Week 1–2</span>
+          <span class="tag gold">Zero Cost</span>
+          <span class="tag">LinkedIn Groups</span>
+          <span class="tag">WhatsApp Trade Groups</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
+          <span>95%</span>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--red);">
+        <div class="card-header">
+          <div class="card-icon">🔫</div>
+          <div>
+            <div class="card-number">Play 02 · Competitor Jacking</div>
+            <div class="card-title">The Complaint Sniper</div>
+          </div>
+        </div>
+        <div class="card-body">
+          Set up Google Alerts + Twitter/X searches for: "IndiaMart problem", "TradeIndia fraud", "Alibaba scam supplier", "B2B marketplace cheated". Every single complaint that surfaces — DM that person within 24 hours. <strong style="color:var(--text)">Not with a pitch.</strong> With a question: <em>"What would an ideal platform do differently?"</em><br><br>
+          You're building a product brief AND a launch customer list simultaneously. These are the HIGHEST-intent leads you'll ever find — people who already tried, already failed, and are actively looking.
+        </div>
+        <div class="card-action">
+          <span class="tag">Ongoing</span>
+          <span class="tag red">High Urgency</span>
+          <span class="tag">Google Alerts</span>
+          <span class="tag blue">Twitter/X</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:90%"></div></div>
+          <span>90%</span>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--gold);">
+        <div class="card-header">
+          <div class="card-icon">📊</div>
+          <div>
+            <div class="card-number">Play 03 · Own the Narrative</div>
+            <div class="card-title">The Industry Report<br><span style="color:var(--gold)">Trojan Horse</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          Publish a FREE, deeply researched <em>"State of B2B Trading India 2026"</em> report. Real data, real insights, 20+ pages. Send it to every trade publication, industry blog, association newsletter.<br><br>
+          <strong style="color:var(--text)">Inside the report:</strong> Tradeclover is presented as the solution to every problem documented. You don't advertise — you educate. By the time 10,000 traders read it, Tradeclover is already the authority. This is how HubSpot, Salesforce, and every SaaS giant you've ever heard of launched category leadership.
+        </div>
+        <div class="card-action">
+          <span class="tag">Week 3–6</span>
+          <span class="tag gold">Highest Credibility</span>
+          <span class="tag">Press-Ready</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+          <span>88%</span>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--purple);">
+        <div class="card-header">
+          <div class="card-icon">👑</div>
+          <div>
+            <div class="card-number">Play 04 · Manufactured Scarcity</div>
+            <div class="card-title">The Founding 100 Council<br><span style="color:var(--purple)">Hermès Birkin Play</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          Hermès doesn't sell Birkin bags. They select who gets to buy one. <strong style="color:var(--text)">Never do a generic "early access signup."</strong> Instead: <em>"Founding Member Council — 100 businesses only. These 100 will get: lifetime 0% platform commission, their company logo on the Tradeclover homepage as a Founding Partner, and direct input into product features."</em><br><br>
+          Cap it at 100. When it fills up, show "CLOSED" publicly. The exclusivity makes the next tier (Early Adopter at ₹X/month) feel like a bargain. Loss aversion is your conversion engine.
+        </div>
+        <div class="card-action">
+          <span class="tag purple">Highest Virality</span>
+          <span class="tag">Waitlist Psychology</span>
+          <span class="tag gold">Lifetime Value</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+          <span>92%</span>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--blue);">
+        <div class="card-header">
+          <div class="card-icon">🤝</div>
+          <div>
+            <div class="card-number">Play 05 · Borrow Distribution</div>
+            <div class="card-title">Partnership Inception<br><span style="color:var(--blue)">Enter Day 1 With 10,000 Users</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          Don't acquire customers. <strong style="color:var(--text)">Acquire the relationships of companies who already have your customers.</strong><br><br>
+          Target: freight forwarders, customs brokers, trade finance NBFCs, GST consultants, logistics aggregators, chamber of commerce networks, MSME associations. Offer them a white-label or co-branded partnership. When they email their 5,000 members: "We've partnered with Tradeclover" — you launch to an audience you never had to build yourself. This is how Airbnb used Craigslist's distribution. Zero ad spend, maximum reach.
+        </div>
+        <div class="card-action">
+          <span class="tag">Week 4–8</span>
+          <span class="tag blue">Borrow Audiences</span>
+          <span class="tag gold">Zero Cost</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:97%"></div></div>
+          <span>97%</span>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="strategy-card reveal" style="--accent-color: #ff6b6b;">
+        <div class="card-header">
+          <div class="card-icon">🎬</div>
+          <div>
+            <div class="card-number">Play 06 · Content Judo</div>
+            <div class="card-title">The Problem Documentary<br><span style="color:#ff6b6b">Never Mention Your Product</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          Create a 5-episode YouTube/LinkedIn mini-series: <em>"The Hidden Problems Killing Indian B2B Trade."</em> Interview real traders, exporters, sourcing managers. Episode 1–4: pure pain. Real stories. No solution. Episode 5: "We found one company trying to fix all of this..."<br><br>
+          <strong style="color:var(--text)">Gary Vaynerchuk calls this "Jab, Jab, Jab, Right Hook."</strong> By episode 5, you have an audience of 10,000+ people who HAVE the exact problem you solve — and they trust you because you showed you understood them before you sold anything.
+        </div>
+        <div class="card-action">
+          <span class="tag">Week 2–8</span>
+          <span class="tag red">Viral Potential</span>
+          <span class="tag">YouTube</span>
+          <span class="tag blue">LinkedIn</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+          <span>82%</span>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--green);">
+        <div class="card-header">
+          <div class="card-icon">🔧</div>
+          <div>
+            <div class="card-number">Play 07 · Free Tool Moat</div>
+            <div class="card-title">The Regulatory Intelligence Trap</div>
+          </div>
+        </div>
+        <div class="card-body">
+          Build a <strong style="color:var(--text)">FREE online tool</strong>: "B2B Trade Compliance Checker" — checks GST rates by category, import/export duty lookup, KYC document checklist, trade finance eligibility. Make it genuinely useful.<br><br>
+          Traders bookmark it. Share it in WhatsApp groups. Procurement managers email it to their teams. You capture every email. When you launch, you have a qualified list of 5,000+ people who already use Tradeclover infrastructure — they just don't know it yet. The product launch becomes a natural next step, not a cold ask.
+        </div>
+        <div class="card-action">
+          <span class="tag">Week 1–3 Build</span>
+          <span class="tag gold">Email Capture</span>
+          <span class="tag">Lead Qualification</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+          <span>85%</span>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--gold);">
+        <div class="card-header">
+          <div class="card-icon">🏛️</div>
+          <div>
+            <div class="card-number">Play 08 · Association Hack</div>
+            <div class="card-title">Trade Association Insider</div>
+          </div>
+        </div>
+        <div class="card-body">
+          Identify 20–30 trade associations (FICCI, CII, EEPC, GJEPC, textile guilds, spice boards, pharma exporters). Don't pitch them your platform. Instead — <strong style="color:var(--text)">solve THEIR problem for free.</strong> Build them a member directory, an event calendar, a news aggregator. Cost: 2 days of dev work each.<br><br>
+          In exchange: they feature Tradeclover in their monthly newsletter to their entire membership. One association newsletter = 5,000 pre-qualified buyers/sellers. 20 associations = 100,000 targeted impressions from a trusted source. You didn't buy ads. You earned distribution.
+        </div>
+        <div class="card-action">
+          <span class="tag">Week 4–10</span>
+          <span class="tag gold">100K+ Reach</span>
+          <span class="tag">Trusted Channel</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:93%"></div></div>
+          <span>93%</span>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--purple);">
+        <div class="card-header">
+          <div class="card-icon">🧠</div>
+          <div>
+            <div class="card-number">Play 09 · Personal Brand Army</div>
+            <div class="card-title">LinkedIn Thought Leader<br><span style="color:var(--purple)">5 Accounts, 90 Days, Launch Day Bomb</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          Build 3–5 LinkedIn personal brand accounts for founders/team. For 90 days, post daily about B2B trading pain points — industry data, case studies, how things work. <strong style="color:var(--text)">Never mention Tradeclover.</strong> Each account grows to 3,000–5,000 followers organically.<br><br>
+          Launch day: all 5 accounts post simultaneously. You reach 15,000–25,000 highly targeted industry professionals in a single moment — with zero ad spend. This is how Notion, Linear, and every viral B2B SaaS launches: their team built audiences before anyone knew they were building a product.
+        </div>
+        <div class="card-action">
+          <span class="tag purple">25K Organic Reach</span>
+          <span class="tag">Day 1 Explosion</span>
+          <span class="tag gold">Zero Ad Cost</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:89%"></div></div>
+          <span>89%</span>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="strategy-card reveal" style="--accent-color: var(--blue);">
+        <div class="card-header">
+          <div class="card-icon">💰</div>
+          <div>
+            <div class="card-number">Play 10 · Paid Judo</div>
+            <div class="card-title">Competitor Keyword Ambush<br><span style="color:var(--blue)">The Cheapest Acquisition Possible</span></div>
+          </div>
+        </div>
+        <div class="card-body">
+          Run Google Search Ads on competitor brand names <em>right now</em>, before you even launch. The ad: <em>"Frustrated with [Competitor]? Something better is coming. Join the Tradeclover waitlist."</em><br><br>
+          People searching a competitor's brand are ALREADY convinced they need a marketplace — they just haven't committed. You intercept them at the highest-intent moment, before they sign up. CPC on brand terms is ₹5–40 vs. ₹500+ for generic category keywords. You're spending 10× less to reach people who are 3× more likely to convert. <strong style="color:var(--text)">This is arbitrage, not advertising.</strong>
+        </div>
+        <div class="card-action">
+          <span class="tag blue">₹5–40 CPC</span>
+          <span class="tag">Start Now</span>
+          <span class="tag red">Time-Limited</span>
+        </div>
+        <div class="impact-bar">
+          <span>Impact</span>
+          <div class="bar-track"><div class="bar-fill" style="width:86%"></div></div>
+          <span>86%</span>
+        </div>
+      </div>
+
+    </div><!-- end strategies-grid -->
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline" style="background: var(--dark2);">
+  <div class="container">
+    <p class="section-tag">When You Do What</p>
+    <h2 class="section-title">Your 90-Day<br>Pre-Launch Sprint</h2>
+    <p class="section-sub">These plays compound. The earlier you start, the more momentum you carry into launch day. Here's the exact sequence.</p>
+
+    <div class="timeline reveal">
+      <div class="timeline-item">
+        <div class="timeline-week">Week 1–2 · Foundation</div>
+        <div class="timeline-title">Build the Invisible Infrastructure</div>
+        <div class="timeline-desc">Start the plays that require time to compound — you can't rush organic trust-building.</div>
+        <div class="timeline-tasks">
+          <span class="task-chip">Set up 5 LinkedIn profiles</span>
+          <span class="task-chip">Google Alerts for competitor complaints</span>
+          <span class="task-chip">Ghost demand seeding in 10 trade forums</span>
+          <span class="task-chip">Competitor keyword ads live</span>
+          <span class="task-chip">Founding 100 waitlist page goes live</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Week 3–4 · Content Engine</div>
+        <div class="timeline-title">Become the Authority</div>
+        <div class="timeline-desc">Start producing the assets that generate trust at scale — once they're live, they work forever.</div>
+        <div class="timeline-tasks">
+          <span class="task-chip">Industry Report research begins</span>
+          <span class="task-chip">Documentary episode 1 filmed</span>
+          <span class="task-chip">Compliance Checker tool launched</span>
+          <span class="task-chip">First 10 Founding Members signed</span>
+          <span class="task-chip">Identify 20 trade associations</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Week 5–7 · Distribution</div>
+        <div class="timeline-title">Build the Distribution Army</div>
+        <div class="timeline-desc">Partnerships and associations take time to activate — start conversations now.</div>
+        <div class="timeline-tasks">
+          <span class="task-chip">5 partnership deals signed</span>
+          <span class="task-chip">Industry Report published + sent to press</span>
+          <span class="task-chip">Documentary episodes 2–3 live</span>
+          <span class="task-chip">50 Founding Members confirmed</span>
+          <span class="task-chip">3 association newsletters confirmed</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Week 8–10 · Amplification</div>
+        <div class="timeline-title">Stack the Gunpowder</div>
+        <div class="timeline-desc">Everything from the first 7 weeks starts to hit simultaneously — controlled chaos that looks like momentum.</div>
+        <div class="timeline-tasks">
+          <span class="task-chip">Association newsletter blasts</span>
+          <span class="task-chip">Documentary episodes 4–5 live</span>
+          <span class="task-chip">Founding 100 "CLOSED" announcement</span>
+          <span class="task-chip">Early Adopter tier opens</span>
+          <span class="task-chip">10 partnerships sending traffic</span>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-week">Week 11–12 · Launch Week</div>
+        <div class="timeline-title">🚀 The Detonation</div>
+        <div class="timeline-desc">All 5 LinkedIn accounts post simultaneously. Partners email their lists. Association newsletters go out. Documentary finale drops. The Founding 100 celebrate publicly. You don't launch cold — you explode into a pre-heated market.</div>
+        <div class="timeline-tasks">
+          <span class="task-chip">LinkedIn army goes live</span>
+          <span class="task-chip">Product Hunt launch</span>
+          <span class="task-chip">Press release distributed</span>
+          <span class="task-chip">Partner email blasts</span>
+          <span class="task-chip">Founding Partners on homepage</span>
+          <span class="task-chip">PR outreach with Report as lead</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="comparison">
+  <div class="container">
+    <p class="section-tag">Why This Beats Standard Playbooks</p>
+    <h2 class="section-title">Tradeclover vs. How<br>Everyone Else Launches</h2>
+    <p class="section-sub">Compare what your competitors did vs. what you're about to do. This is how you don't just enter a market — you redefine the starting line.</p>
+
+    <div style="overflow-x:auto; border-radius:16px; border:1px solid var(--border);">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>What Most Do</th>
+            <th>Standard Result</th>
+            <th class="you-column">Tradeclover Play</th>
+            <th class="you-column">Tradeclover Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Launch with ads, hope for clicks</td>
+            <td>₹500+ CPL, no trust</td>
+            <td class="you-column">Complaint Sniper + Demand Seeding</td>
+            <td class="you-column"><span class="check">✓</span> Pre-qualified leads at ₹0</td>
+          </tr>
+          <tr>
+            <td>"Early access" signup page</td>
+            <td>Generic list, low commitment</td>
+            <td class="you-column">Founding 100 Council (capped, exclusive)</td>
+            <td class="you-column"><span class="check">✓</span> High-intent advocates who feel chosen</td>
+          </tr>
+          <tr>
+            <td>Cold email campaigns</td>
+            <td>&lt;2% open rate, marked spam</td>
+            <td class="you-column">Association insider partnerships</td>
+            <td class="you-column"><span class="check">✓</span> 40%+ open rates via trusted source</td>
+          </tr>
+          <tr>
+            <td>Social media posts about their product</td>
+            <td>Algorithm suppressed, low reach</td>
+            <td class="you-column">Thought leader army (no product mention)</td>
+            <td class="you-column"><span class="check">✓</span> 25K+ organic reach, full algorithm support</td>
+          </tr>
+          <tr>
+            <td>Generic "About Us" blog posts</td>
+            <td>Nobody reads it</td>
+            <td class="you-column">Industry Report (Trojan Horse content)</td>
+            <td class="you-column"><span class="check">✓</span> Press coverage, backlinks, authority</td>
+          </tr>
+          <tr>
+            <td>Pay for expensive category keywords</td>
+            <td>₹500–2000 per click</td>
+            <td class="you-column">Competitor brand keyword ambush</td>
+            <td class="you-column"><span class="check">✓</span> ₹5–40 per click, 3× higher intent</td>
+          </tr>
+          <tr>
+            <td>Build first, market second</td>
+            <td>Launch to silence</td>
+            <td class="you-column">90-day pre-launch demand construction</td>
+            <td class="you-column"><span class="check">✓</span> Launch into a pre-heated waiting market</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout reveal" style="margin-top: 3rem;">
+      <h3>The Unfair Advantage</h3>
+      <p>You haven't launched yet. Every competitor launched before thinking about any of this. You can build distribution, authority, and trust <em>before</em> you have a single live user. When you launch, you won't be asking people to try something new — they'll already feel like they've been waiting for you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRIORITY MATRIX -->
+<section id="matrix" style="background: var(--dark2);">
+  <div class="container">
+    <p class="section-tag">Where to Start</p>
+    <h2 class="section-title">Priority Matrix:<br>What to Do This Week</h2>
+    <p class="section-sub">Not all 10 plays start at the same time. Here's how to sequence them by effort vs. impact.</p>
+
+    <div class="matrix-grid reveal">
+      <div class="matrix-cell hot">
+        <div class="matrix-label hot-l">🔥 Do This Week — High Impact, Low Effort</div>
+        <ul class="matrix-items">
+          <li>Ghost demand seeding in trade forums</li>
+          <li>Google Alerts for competitor complaints</li>
+          <li>Founding 100 waitlist page (1 page HTML)</li>
+          <li>Competitor keyword ads (₹500 test budget)</li>
+          <li>Create 2 LinkedIn thought leader profiles</li>
+        </ul>
+      </div>
+      <div class="matrix-cell warm">
+        <div class="matrix-label warm-l">⚡ Do This Month — High Impact, Medium Effort</div>
+        <ul class="matrix-items">
+          <li>Industry Report research + write</li>
+          <li>Identify & contact 5 trade associations</li>
+          <li>Film documentary episode 1</li>
+          <li>B2B Compliance Checker tool (MVP)</li>
+          <li>Close first 3 partnership conversations</li>
+        </ul>
+      </div>
+      <div class="matrix-cell cool">
+        <div class="matrix-label cool-l">📈 Do This Quarter — High Impact, High Effort</div>
+        <ul class="matrix-items">
+          <li>Full documentary series (5 episodes)</li>
+          <li>20 trade association relationships</li>
+          <li>LinkedIn army at 3K+ followers each</li>
+          <li>Full partnership distribution network live</li>
+          <li>Launch PR campaign with Industry Report</li>
+        </ul>
+      </div>
+      <div class="matrix-cell low">
+        <div class="matrix-label low-l">⏳ Defer — Low Impact or Low Urgency</div>
+        <ul class="matrix-items">
+          <li>Paid social media ads (wait for organic first)</li>
+          <li>Influencer partnerships (too early)</li>
+          <li>Trade show booths (expensive, slow ROI)</li>
+          <li>Generic email newsletters (no audience yet)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quote-block reveal" style="margin-top: 3rem;">
+      "The goal is to create the feeling of inevitability before you ever ask for a purchase. When users finally see Tradeclover, they should think: I've been hearing about this everywhere — it must be exactly what I need."
+      <div class="quote-source">— The core principle behind every disruptive marketplace that ever won</div>
+    </div>
+
+    <div class="charts-grid reveal" style="margin-top: 2rem;">
+      <div class="chart-card">
+        <h3>90-Day Play Activation Sequence</h3>
+        <div class="chart-value">Staggered Launch</div>
+        <div class="chart-wrapper">
+          <canvas id="sequenceChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Cost Per Lead: You vs. Standard Launch</h3>
+        <div class="chart-value">94% Lower CPL</div>
+        <div class="chart-wrapper">
+          <canvas id="cplChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="tc-logo">🍀 Tradeclover</div>
+  <p style="margin-top:0.5rem; font-size:1rem; font-weight:600; color: var(--text);">You don't follow the market. You make the market.</p>
+  <p style="margin-top:0.5rem;">Pre-Launch Intelligence Report · Built for Tradeclover · June 2026</p>
+  <p style="margin-top:1rem; font-size:0.75rem;">The 10 plays above are your blueprint. The window to do them before competitors notice is open right now. Every week you wait, someone else might close it.</p>
+</footer>
+
+<script>
+// CHART.JS CONFIG
+Chart.defaults.color = '#6b9e72';
+Chart.defaults.borderColor = '#1e3a22';
+Chart.defaults.font.family = 'Segoe UI, system-ui, sans-serif';
+
+// Trust Deficit Doughnut
+new Chart(document.getElementById('trustChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Buyers who experienced fraud/dispute', 'No way to verify seller KYC', 'Lost money due to no escrow', 'Satisfied with current platform'],
+    datasets: [{
+      data: [38, 21, 14, 27],
+      backgroundColor: ['#ff4757','#FFD700','#a855f7','#00C851'],
+      borderWidth: 0,
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 10, padding: 12, font: { size: 11 } } }
+    }
+  }
+});
+
+// ROI Comparison Bar
+new Chart(document.getElementById('roiChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Paid Ads\n(Standard)', 'SEO\n(Standard)', 'Content\n(Standard)', 'Ghost Demand', 'Associations', 'Partnerships', 'Comp.Sniper'],
+    datasets: [{
+      label: 'Avg. ROI Multiple',
+      data: [2.3, 4.1, 5.8, 18, 22, 31, 26],
+      backgroundColor: (ctx) => ctx.dataIndex < 3 ? 'rgba(255,71,87,0.5)' : 'rgba(0,200,81,0.6)',
+      borderColor: (ctx) => ctx.dataIndex < 3 ? '#ff4757' : '#00C851',
+      borderWidth: 1,
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#1e3a22' }, ticks: { font: { size: 10 } } },
+      x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+    }
+  }
+});
+
+// Momentum Line Chart
+new Chart(document.getElementById('momentumChart'), {
+  type: 'line',
+  data: {
+    labels: ['Wk1','Wk2','Wk3','Wk4','Wk5','Wk6','Wk7','Wk8','Wk9','Wk10','Wk11','Wk12'],
+    datasets: [
+      {
+        label: 'Traditional Launch',
+        data: [0,0,0,0,0,0,0,0,0,0,0,100],
+        borderColor: '#ff4757', borderWidth: 2, borderDash: [5,5],
+        pointRadius: 3, fill: false, tension: 0.3
+      },
+      {
+        label: 'Tradeclover Plays',
+        data: [5,12,22,35,50,62,72,80,88,93,97,100],
+        borderColor: '#00C851', borderWidth: 2.5,
+        pointRadius: 3, fill: true,
+        backgroundColor: 'rgba(0,200,81,0.07)', tension: 0.4
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { boxWidth: 12, font: { size: 10 } } } },
+    scales: {
+      y: { beginAtZero: true, max: 110, grid: { color: '#1e3a22' }, ticks: { font: { size: 9 } } },
+      x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+    }
+  }
+});
+
+// Sequence Gantt-style
+new Chart(document.getElementById('sequenceChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Ghost Demand','Comp.Alerts','Founding 100','Keyword Ads','Industry Report','Assoc.Hack','Documentary','Compliance Tool','LinkedIn Army','Partnerships'],
+    datasets: [
+      { label: 'Build', data: [1,1,1,1,3,2,6,2,1,4], backgroundColor: 'rgba(0,200,81,0.3)', borderColor: '#00C851', borderWidth: 1, borderRadius: 2 },
+      { label: 'Active', data: [11,11,8,11,9,8,6,10,11,8], backgroundColor: 'rgba(0,200,81,0.6)', borderColor: '#00C851', borderWidth: 1, borderRadius: 2 }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { boxWidth: 10, font: { size: 10 } } } },
+    scales: {
+      x: { stacked: true, max: 12, grid: { color: '#1e3a22' }, ticks: { font: { size: 9 }, callback: v => 'Wk'+v } },
+      y: { stacked: true, grid: { display: false }, ticks: { font: { size: 9 } } }
+    }
+  }
+});
+
+// CPL Comparison
+new Chart(document.getElementById('cplChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Google Ads\n(Brand)', 'LinkedIn Ads', 'Facebook Ads', 'Association\nPartner', 'Comp.Sniper', 'Ghost Demand', 'Free Tool\nCapture'],
+    datasets: [{
+      label: 'Cost Per Lead (₹)',
+      data: [1200, 3500, 850, 45, 0, 0, 12],
+      backgroundColor: ctx => {
+        const v = ctx.parsed.y;
+        if (v === 0) return 'rgba(0,200,81,0.7)';
+        if (v < 100) return 'rgba(0,200,81,0.5)';
+        if (v < 1000) return 'rgba(255,215,0,0.5)';
+        return 'rgba(255,71,87,0.5)';
+      },
+      borderColor: ctx => {
+        const v = ctx.parsed.y;
+        if (v < 100) return '#00C851';
+        if (v < 1000) return '#FFD700';
+        return '#ff4757';
+      },
+      borderWidth: 1, borderRadius: 4
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#1e3a22' }, ticks: { font: { size: 10 }, callback: v => '₹'+v } },
+      x: { grid: { display: false }, ticks: { font: { size: 9 } } }
+    }
+  }
+});
+
+// COUNTER ANIMATION
+const counters = document.querySelectorAll('[data-count]');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const el = e.target;
+      const target = +el.dataset.count;
+      const suffix = el.dataset.suffix || (target > 10 ? (target >= 100 ? 'B+' : '%') : '');
+      const duration = 1500;
+      const step = target / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = Math.floor(current) + suffix;
+      }, 16);
+      observer.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => observer.observe(c));
+
+// REVEAL ANIMATION
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+reveals.forEach(r => revealObs.observe(r));
+</script>
+</body>
+</html>
