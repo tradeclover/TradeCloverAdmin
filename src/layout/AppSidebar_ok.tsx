@@ -68,7 +68,6 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "Categories", path: "/master/categories", pro: false },
       { name: "Subcategories", path: "/master/sub-categories", pro: false },
-      { name: "Sub-Sub Categories", path: "/master/sub-sub-categories", pro: false },
       { name: "Supply Types", path: "/master/supply-types", pro: false },
       { name: "Pricing Terms", path: "/master/pricing-terms", pro: false },
       { name: "Conditions", path: "/master/conditions", pro: false },
