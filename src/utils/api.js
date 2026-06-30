@@ -2,7 +2,8 @@ import axios from 'axios';
 
 //const API_BASE_URL = 'https://api-tradeclover.techsperia.in/api';
 //local API
-const API_BASE_URL = 'https://api.tradeclover.com/api';
+const API_BASE_URL = 'http://api.tradeclover.com/api';
+
 const REFRESH_TOKEN_URL = `${API_BASE_URL}/auth/refresh/`;
 
 const redirectToLogin = () => {

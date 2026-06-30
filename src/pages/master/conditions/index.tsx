@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Head from "next/head";
 import AdminLayout from "@/layout/AdminLayout";
 import {
   Table, TableBody, TableCell, TableHeader, TableRow,
@@ -95,6 +96,9 @@ export default function ConditionsPage() {
 
   return (
     <AdminLayout>
+      <Head>
+        <title>Dashboard — Conditions</title>
+      </Head>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-title-md font-bold text-gray-800 dark:text-white/90">Conditions</h1>
         <Button onClick={openCreate} startIcon={<PlusIcon />}>Add Condition</Button>

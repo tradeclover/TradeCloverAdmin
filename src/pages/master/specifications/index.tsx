@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Head from "next/head";
 import AdminLayout from "@/layout/AdminLayout";
 import {
     Table,
@@ -245,6 +246,9 @@ export default function SpecificationsPage() {
 
     return (
         <AdminLayout>
+            <Head>
+                <title>Dashboard — Specification</title>
+            </Head>
             <div className="flex justify-between items-center mb-4">
                 <h1 className="font-bold text-gray-800 text-title-md dark:text-white/90">Specifications</h1>
                 <Button onClick={handleCreate} startIcon={<PlusIcon />}>
