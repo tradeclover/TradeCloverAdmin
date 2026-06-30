@@ -2,7 +2,7 @@ import axios from 'axios';
 
 //const API_BASE_URL = 'https://api-tradeclover.techsperia.in/api';
 //local API
-const API_BASE_URL = 'https://api.tradeclover.com/api';
+const API_BASE_URL = 'http://192.168.1.40:8000/api';
 const REFRESH_TOKEN_URL = `${API_BASE_URL}/auth/refresh/`;
 
 const redirectToLogin = () => {
@@ -171,21 +171,3 @@ export const apiPatch = (url, data, config = {}, isFormData = false) => {
 export const apiDelete = (url, config = {}) => {
   return apiRequest(url, 'DELETE', null, config);
 };
-
-/* ----------------------------------------------------------------------------
- * Category-tree specifications (admin)
- * SpecGroup → SpecOption, attached to a sub-category
- * -------------------------------------------------------------------------- */
-
-export const adminListSpecGroups = (subcategoryId) =>
-  apiGet(`/products/admin/spec-groups/?subcategory=${subcategoryId}`);
-
-// payload: { subcategory, label, hint, step, selection, allow_other, order, options:[...] }
-export const adminCreateSpecGroup = (payload) =>
-  apiPost('/products/admin/spec-groups/', payload);
-
-export const adminUpdateSpecGroup = (id, payload) =>
-  apiPatch(`/products/admin/spec-groups/${id}/`, payload);
-
-export const adminDeleteSpecGroup = (id) =>
-  apiDelete(`/products/admin/spec-groups/${id}/`);
