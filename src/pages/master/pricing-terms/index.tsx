@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Head from "next/head";
 import AdminLayout from "@/layout/AdminLayout";
 import {
   Table, TableBody, TableCell, TableHeader, TableRow,
@@ -95,6 +96,9 @@ export default function PricingTermsPage() {
 
   return (
     <AdminLayout>
+      <Head>
+        <title>Dashboard — Pricing Terms</title>
+      </Head>
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-title-md font-bold text-gray-800 dark:text-white/90">Pricing Terms</h1>
         <Button onClick={openCreate} startIcon={<PlusIcon />}>Add Pricing Term</Button>
