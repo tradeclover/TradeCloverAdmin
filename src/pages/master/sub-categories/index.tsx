@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Head from "next/head";
 import AdminLayout from '@/layout/AdminLayout';
 import {
     Table,
@@ -16,6 +15,7 @@ import InputField from "@/components/form/input/InputField";
 import Select from "@/components/form/Select";
 import { PencilIcon, TrashBinIcon, PlusIcon } from "@/icons";
 import Toast from "@/components/ui/toast/Toast";
+import Pagination from "@/components/tables/Pagination";
 import { apiGet, apiPost, apiPut, apiDelete } from "@/utils/api";
 
 interface SubCategory {
@@ -44,6 +44,11 @@ export default function SubCategoriesPage() {
     const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [loading, setLoading] = useState(true);
+
+    // Search + client-side pagination
+    const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const PAGE_SIZE = 10;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingSubCategory, setEditingSubCategory] = useState<SubCategory | null>(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -240,16 +245,50 @@ export default function SubCategoriesPage() {
         );
     }
 
+    // Filter by search (subcategory name/slug or parent category name), then paginate
+    const categoryName = (sub: SubCategory) =>
+        sub.category_name ||
+        categories.find((cat) => cat.id === sub.category)?.name ||
+        "";
+    const q = search.trim().toLowerCase();
+    const filteredSubCategories = q
+        ? subCategories.filter(
+              (s) =>
+                  s.name.toLowerCase().includes(q) ||
+                  (s.slug || "").toLowerCase().includes(q) ||
+                  categoryName(s).toLowerCase().includes(q)
+          )
+        : subCategories;
+
+    const totalPages = Math.max(1, Math.ceil(filteredSubCategories.length / PAGE_SIZE));
+    const safePage = Math.min(currentPage, totalPages);
+    const paginatedSubCategories = filteredSubCategories.slice(
+        (safePage - 1) * PAGE_SIZE,
+        safePage * PAGE_SIZE
+    );
+
     return (
         <AdminLayout>
-            <Head>
-            <title>Dashboard — Sub-Categories</title>
-            </Head>
             <div className="flex justify-between items-center mb-4">
                 <h1 className="font-bold text-gray-800 text-title-md dark:text-white/90">Sub Categories</h1>
                 <Button onClick={handleCreate} startIcon={<PlusIcon />}>
                     Create Sub-Category
                 </Button>
+            </div>
+
+            <div className="mb-4 max-w-sm">
+                <div className="relative">
+                    <svg className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" />
+                    </svg>
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={(e) => { setSearch(e.target.value); setCurrentPage(1); }}
+                        placeholder="Search sub-category or category…"
+                        className="w-full rounded-lg border border-gray-300 py-2.5 pl-10 pr-3 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500 dark:border-gray-700 dark:bg-white/[0.03] dark:text-white/90"
+                    />
+                </div>
             </div>
 
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
@@ -291,7 +330,13 @@ export default function SubCategoriesPage() {
                         </TableHeader>
 
                         <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                            {subCategories.map((subCategory) => (
+                            {paginatedSubCategories.length === 0 ? (
+                                <TableRow>
+                                    <TableCell className="px-5 py-6 text-gray-400 text-theme-sm">
+                                        {q ? "No sub-categories match your search." : "No sub-categories yet."}
+                                    </TableCell>
+                                </TableRow>
+                            ) : paginatedSubCategories.map((subCategory) => (
                                 <TableRow key={subCategory.id}>
                                     <TableCell className="px-5 py-4 text-gray-800 text-theme-sm dark:text-white/90">
                                         {subCategory.name}
@@ -336,6 +381,20 @@ export default function SubCategoriesPage() {
                     </Table>
                 </div>
             </div>
+
+            {totalPages > 1 && (
+                <div className="mt-4 flex items-center justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                        Showing {(safePage - 1) * PAGE_SIZE + 1}
+                        –{Math.min(safePage * PAGE_SIZE, filteredSubCategories.length)} of {filteredSubCategories.length}
+                    </span>
+                    <Pagination
+                        currentPage={safePage}
+                        totalPages={totalPages}
+                        onPageChange={setCurrentPage}
+                    />
+                </div>
+            )}
 
             {/* Modal for Create/Edit */}
             <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} className="max-w-md">
