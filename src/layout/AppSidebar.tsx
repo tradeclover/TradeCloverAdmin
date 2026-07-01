@@ -137,6 +137,11 @@ const navItems: NavItem[] = [
     path: "/orders",
   },
   {
+    icon: <FontAwesomeIcon icon={faBoxOpen} className={iconClass} />,
+    name: "RFQ Requests",
+    path: "/rfq-requests",
+  },
+  {
     icon: <FontAwesomeIcon icon={faComments} className={iconClass} />,
     name: "User Chats",
     path: "/users-chats",
