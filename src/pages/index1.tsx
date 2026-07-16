@@ -207,8 +207,6 @@ export default function Dashboard() {
   const [todayItems, setTodayItems] = useState<TodayActionItems | null>(null);
   const [expiringSubs, setExpiringSubs] = useState<ExpiringSubscription[]>([]);
   const [openDisputes, setOpenDisputes] = useState<OpenDispute[]>([]);
-  const [gstExpiring, setGstExpiring] = useState<number>(0);
-  const [gstWindowDays, setGstWindowDays] = useState<number>(2);
   const [kycUsers, setKycUsers] = useState<KycUser[]>([]);
   const [dashTotals, setDashTotals] = useState<DashboardTotals | null>(null);
   const [ordersGraph, setOrdersGraph] = useState<GraphPoint[]>([]);
@@ -225,14 +223,13 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchAll = async () => {
-      const [bannerRes, todayRes, subsRes, kycRes, dashRes, disputesRes, gstRes] = await Promise.allSettled([
+      const [bannerRes, todayRes, subsRes, kycRes, dashRes, disputesRes] = await Promise.allSettled([
         apiGet("/users/admin/action-banner/"),
         apiGet("/users/admin/today-action-items/"),
         apiGet("/users/admin/expiring-subscriptions/?days=30"),
         apiGet("/users/admin/unverified-users/"),
         apiGet("/users/admin/dashboard/"),
         apiGet("/users/admin/open-disputes/"),
-        apiGet("/users/admin/gst-expiry/"),
       ]);
 
       if (bannerRes.status === "fulfilled") {
@@ -264,12 +261,6 @@ export default function Dashboard() {
       if (disputesRes.status === "fulfilled") {
         const d = disputesRes.value.data?.data ?? disputesRes.value.data;
         setOpenDisputes(Array.isArray(d) ? d : (d?.results ?? []));
-      }
-      if (gstRes.status === "fulfilled") {
-        const d = gstRes.value.data?.data ?? gstRes.value.data;
-        const count = typeof d?.count === "number" ? d.count : (Array.isArray(d?.results) ? d.results.length : 0);
-        setGstExpiring(count);
-        if (typeof d?.window_days === "number") setGstWindowDays(d.window_days);
       }
 
       setLoading(false);
@@ -338,7 +329,7 @@ export default function Dashboard() {
   const totalOrders = dashTotals?.orders ?? 0;
   const socialMediaReqs = dashTotals?.social_media_requests ?? 0;
   const bannerText = banner?.text ?? "";
-  const hasBanner = !!(bannerText || kycPending || openDisputesCount || gstExpiring);
+  const hasBanner = !!(bannerText || kycPending || openDisputesCount);
 
   const tdKyc = todayItems?.kyc_pending ?? kycPending;
   const tdProducts = todayItems?.product_approvals_pending ?? c.product_approvals_pending ?? 0;
@@ -422,21 +413,14 @@ export default function Dashboard() {
               <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-red-500" />
               <span>
                 <span className="font-semibold">Action needed right now: </span>
-                {[
-                  bannerText ||
-                    [
-                      kycPending ? `${kycPending} KYC pending` : null,
-                      openDisputesCount ? `${openDisputesCount} disputes open` : null,
-                      expiringPlans ? `${expiringPlans} subscriptions expiring this month` : null,
-                    ]
-                      .filter(Boolean)
-                      .join(" · "),
-                  gstExpiring
-                    ? `${gstExpiring} GST expiring in ${gstWindowDays} day${gstWindowDays === 1 ? "" : "s"}`
-                    : null,
-                ]
-                  .filter(Boolean)
-                  .join(" · ")}
+                {bannerText ||
+                  [
+                    kycPending ? `${kycPending} KYC pending` : null,
+                    openDisputesCount ? `${openDisputesCount} disputes open` : null,
+                    expiringPlans ? `${expiringPlans} subscriptions expiring this month` : null,
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
               </span>
             </div>
           )}
