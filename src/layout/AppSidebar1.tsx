@@ -69,7 +69,7 @@ const navItems: NavItem[] = [
       { name: "Categories", path: "/master/categories", pro: false },
       { name: "Subcategories", path: "/master/sub-categories", pro: false },
       { name: "Specifications", path: "/master/specifications", pro: false },
-      { name: "Sub-Sub Categories", path: "/master/sub-sub-categories", pro: false },
+      // { name: "Sub-Sub Categories", path: "/master/sub-sub-categories", pro: false },
       { name: "Supply Types", path: "/master/supply-types", pro: false },
       { name: "Pricing Terms", path: "/master/pricing-terms", pro: false },
       { name: "Conditions", path: "/master/conditions", pro: false },
@@ -135,6 +135,11 @@ const navItems: NavItem[] = [
     icon: <FontAwesomeIcon icon={faCartShopping} className={iconClass} />,
     name: "Orders",
     path: "/orders",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faBoxOpen} className={iconClass} />,
+    name: "RFQ Requests",
+    path: "/rfq-requests",
   },
   {
     icon: <FontAwesomeIcon icon={faComments} className={iconClass} />,
