@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import AdminLayout from '@/layout/AdminLayout';
 import { ChevronLeftIcon } from "@/icons";
-import { apiGet, apiPost, apiPatch } from "@/utils/api";
+import { apiGet, apiPost } from "@/utils/api";
 import Button from "@/components/ui/button/Button";
 
 interface BusinessProfile {
@@ -55,7 +55,6 @@ interface UserKyc {
     id: number;
     gstin: string | null;
     gstin_score: number | null;
-    gstin_expiry_date: string | null;
     pan: string | null;
     pan_score: number | null;
     cin: string | null;
@@ -151,36 +150,10 @@ const VerifiedUserDetailPage = () => {
     const [certLoading, setCertLoading] = useState(false);
     const [certUrl, setCertUrl] = useState<string | null>(null);
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error'; visible: boolean }>({ message: '', type: 'success', visible: false });
-    const [gstExpiryInput, setGstExpiryInput] = useState<string>('');
-    const [gstSaving, setGstSaving] = useState(false);
 
     const showToast = (message: string, type: 'success' | 'error') => {
         setToast({ message, type, visible: true });
         setTimeout(() => setToast((p) => ({ ...p, visible: false })), 4000);
-    };
-
-    const handleSaveGstExpiry = async () => {
-        if (!id) return;
-        try {
-            setGstSaving(true);
-            const res = await apiPatch(`/users/admin/users/${id}/gst-expiry/`, {
-                gstin_expiry_date: gstExpiryInput || null,
-            });
-            // Reflect the saved value locally without a full refetch.
-            setUser((prev) =>
-                prev
-                    ? { ...prev, user_kyc: { ...prev.user_kyc, gstin_expiry_date: res?.data?.gstin_expiry_date ?? null } }
-                    : prev
-            );
-            showToast(
-                gstExpiryInput ? 'GST expiry date saved' : 'GST expiry date cleared',
-                'success'
-            );
-        } catch {
-            showToast('Failed to save GST expiry date', 'error');
-        } finally {
-            setGstSaving(false);
-        }
     };
 
     const fetchUser = useCallback(async () => {
@@ -217,13 +190,6 @@ const VerifiedUserDetailPage = () => {
     useEffect(() => {
         fetchUser();
     }, [fetchUser]);
-
-    // Keep the editable GST-expiry field in sync with the loaded value.
-    useEffect(() => {
-        const value = user?.user_kyc?.gstin_expiry_date ?? '';
-        // Normalise any ISO datetime to the YYYY-MM-DD the <input type="date"> wants.
-        setGstExpiryInput(value ? String(value).slice(0, 10) : '');
-    }, [user?.user_kyc?.gstin_expiry_date]);
 
     const formatDate = (dateString: string | null) => {
         if (!dateString) return 'N/A';
@@ -739,91 +705,6 @@ const VerifiedUserDetailPage = () => {
                                         {renderDocumentCard('IEC Certificate', user.user_kyc.iec_url, user.user_kyc.iec, user.user_kyc.iec_status, user.user_kyc.iec_score)}
                                         {renderDocumentCard('Udhyam Registration', user.user_kyc.udhyam_url, user.user_kyc.udhyam, user.user_kyc.udhyam_status, user.user_kyc.udhyam_score)}
                                     </div>
-                                </div>
-                            </div>
-
-                            {/* GST Registration Expiry — manual entry */}
-                            <div className="bg-white rounded-lg shadow overflow-hidden">
-                                <div className="p-4 md:p-6 border-b border-gray-200 bg-gray-50">
-                                    <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                        </svg>
-                                        GST Registration Expiry
-                                    </h3>
-                                </div>
-                                <div className="p-4 md:p-6">
-                                    {(() => {
-                                        const current = user.user_kyc?.gstin_expiry_date ?? null;
-                                        let daysBadge: React.ReactNode = null;
-                                        if (current) {
-                                            // Compare local midnights built from the date parts so the
-                                            // difference is a whole number of days (no UTC-vs-local skew:
-                                            // tomorrow reads as 1, not 2).
-                                            const [ty, tm, td] = String(current).slice(0, 10).split('-').map(Number);
-                                            const target = new Date(ty, (tm || 1) - 1, td || 1);
-                                            const now = new Date();
-                                            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                                            const days = Math.round((target.getTime() - today.getTime()) / 86400000);
-                                            const cls =
-                                                days < 0 ? 'bg-red-100 text-red-800'
-                                                    : days <= 2 ? 'bg-amber-100 text-amber-800'
-                                                        : 'bg-green-100 text-green-800';
-                                            const label =
-                                                days < 0 ? `Expired ${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'} ago`
-                                                    : days === 0 ? 'Expires today'
-                                                        : `Expires in ${days} day${days === 1 ? '' : 's'}`;
-                                            daysBadge = (
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${cls}`}>{label}</span>
-                                            );
-                                        }
-                                        return (
-                                            <div className="flex flex-col gap-4">
-                                                <div className="flex flex-wrap items-center gap-3">
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-500 mb-1">Current GST Expiry Date</label>
-                                                        <p className="text-gray-900">{current ? formatDate(String(current)) : 'Not set'}</p>
-                                                    </div>
-                                                    {daysBadge}
-                                                </div>
-                                                <div className="flex flex-wrap items-end gap-3">
-                                                    <div>
-                                                        <label className="block text-sm font-medium text-gray-500 mb-1">Set / Update Expiry Date</label>
-                                                        <input
-                                                            type="date"
-                                                            value={gstExpiryInput}
-                                                            onChange={(e) => setGstExpiryInput(e.target.value)}
-                                                            onClick={(e) => {
-                                                                const el = e.currentTarget as HTMLInputElement & { showPicker?: () => void };
-                                                                try { el.showPicker?.(); } catch { /* unsupported: falls back to icon click */ }
-                                                            }}
-                                                            className="cursor-pointer rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                                        />
-                                                    </div>
-                                                    <button
-                                                        onClick={handleSaveGstExpiry}
-                                                        disabled={gstSaving}
-                                                        className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60"
-                                                    >
-                                                        {gstSaving ? 'Saving...' : 'Save'}
-                                                    </button>
-                                                    {gstExpiryInput && (
-                                                        <button
-                                                            onClick={() => { setGstExpiryInput(''); }}
-                                                            disabled={gstSaving}
-                                                            className="inline-flex items-center gap-1 rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-60"
-                                                            title="Clear the date field (then Save to remove the expiry)"
-                                                        >
-                                                            Clear
-                                                        </button>
-                                                    )}
-                                                </div>
-                                                <p className="text-xs text-gray-400">
-                                                    A daily job flags users whose GST expires within the next 2 days on the GST Expiry page. Changing this date updates that list automatically.
-                                                </p>
-                                            </div>
-                                        );
-                                    })()}
                                 </div>
                             </div>
 

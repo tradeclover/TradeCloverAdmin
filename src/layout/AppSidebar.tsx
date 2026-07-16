@@ -23,6 +23,7 @@ import {
   faClipboardList,
   faIdCard,
   faComments,
+  faCalendarXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   ChevronDownIcon,
@@ -115,6 +116,11 @@ const navItems: NavItem[] = [
     icon: <FontAwesomeIcon icon={faUserCheck} className={iconClass} />,
     name: "Verified Users",
     path: "/verified-users",
+  },
+  {
+    icon: <FontAwesomeIcon icon={faCalendarXmark} className={iconClass} />,
+    name: "GST Expiry",
+    path: "/gst-expiry",
   },
   {
     icon: <FontAwesomeIcon icon={faUserTimes} className={iconClass} />,

@@ -76,8 +76,8 @@ const getNotificationMeta = (type: string) => {
           </svg>
         ),
         color: "bg-red-100 text-red-600 dark:bg-red-500/10 dark:text-red-400",
-        href: "/gst-expiry",
-        label: "GST Expiry",
+        href: "/subscriptions",
+        label: "Subscription",
       };
     default:
       return {
