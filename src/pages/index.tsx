@@ -432,7 +432,7 @@ export default function Dashboard() {
                       .filter(Boolean)
                       .join(" · "),
                   gstExpiring
-                    ? `${gstExpiring} GST expiring in ${gstWindowDays} day${gstWindowDays === 1 ? "" : "s"}`
+                    ? `${gstExpiring} User GST expiring in ${gstWindowDays} day${gstWindowDays === 1 ? "" : "s"}`
                     : null,
                 ]
                   .filter(Boolean)
